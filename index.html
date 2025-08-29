@@ -1,11 +1,60 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>BFHL API Tester</title>
+  <title>BFHL Tester</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f7f7f7;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 50px;
+    }
+    h2 {
+      color: #333;
+    }
+    input {
+      width: 400px;
+      padding: 10px;
+      font-size: 16px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      background-color: #4CAF50;
+      color: white;
+      margin-bottom: 20px;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    pre {
+      width: 80%;
+      max-width: 700px;
+      background-color: #eaeaea;
+      padding: 15px;
+      border-radius: 5px;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    .note {
+      color: #555;
+      margin-bottom: 10px;
+    }
+  </style>
 </head>
 <body>
-  <h2>Submit Array Data</h2>
-  <input type="text" id="arrayInput" placeholder='Enter array like ["1","a","$"]' size="50">
+  <h2>BFHL Tester</h2>
+  
+  <input type="text" id="arrayInput" placeholder='Enter array like ["1","a","$"]'>
   <button onclick="submitData()">Submit</button>
   <pre id="result"></pre>
 
