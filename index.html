@@ -1,56 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BFHL API Tester</title>
-  <style>
-    body { font-family: Arial, sans-serif; padding: 20px; }
-    input, button, textarea { padding: 10px; margin: 5px 0; width: 100%; }
-    button { cursor: pointer; }
-    pre { background: #f4f4f4; padding: 15px; }
-  </style>
 </head>
 <body>
-  <h2>BFHL API Tester</h2>
-
-  <label>Enter Array Data (comma separated):</label>
-  <input type="text" id="arrayInput" placeholder='e.g., 1,2,A,b,$,5' />
-
-  <button id="submitBtn">Submit</button>
-
-  <h3>Response:</h3>
-  <pre id="responseOutput">No response yet.</pre>
+  <h2>Submit Array Data</h2>
+  <input type="text" id="arrayInput" placeholder='Enter array like ["1","a","$"]' size="50">
+  <button onclick="submitData()">Submit</button>
+  <pre id="result"></pre>
 
   <script>
-    const submitBtn = document.getElementById('submitBtn');
-    const arrayInput = document.getElementById('arrayInput');
-    const responseOutput = document.getElementById('responseOutput');
-
-    submitBtn.addEventListener('click', async () => {
-      const rawData = arrayInput.value.trim();
-      if (!rawData) {
-        alert("Please enter some data.");
+    async function submitData() {
+      const input = document.getElementById("arrayInput").value;
+      let dataArray;
+      try {
+        dataArray = JSON.parse(input);
+      } catch {
+        document.getElementById("result").textContent = "Invalid array format";
         return;
       }
 
-      // Convert comma-separated input to array
-      const dataArray = rawData.split(',').map(item => item.trim());
+      const response = await fetch("/bfhl", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ data: dataArray })
+      });
 
-      try {
-        const response = await fetch('https://bfhl-xdcx.onrender.com/bfhl', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ data: dataArray })
-        });
-
-        const result = await response.json();
-        responseOutput.textContent = JSON.stringify(result, null, 2);
-
-      } catch (err) {
-        responseOutput.textContent = 'Error: ' + err.message;
-      }
-    });
+      const result = await response.json();
+      document.getElementById("result").textContent = JSON.stringify(result, null, 2);
+    }
   </script>
 </body>
 </html>

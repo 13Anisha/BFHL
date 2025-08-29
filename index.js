@@ -82,14 +82,19 @@
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use(express.static(__dirname));
 
-// Function to create reversed string with alternating caps
 const createAltCapsString = (words) => {
   const combined = words.join("");
   const reversed = combined.split("").reverse().join("");
@@ -100,15 +105,16 @@ const createAltCapsString = (words) => {
   return result;
 };
 
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "index.html"));
+});
+
 app.post("/bfhl", (req, res) => {
   try {
     const { data } = req.body;
 
     if (!Array.isArray(data)) {
-      return res.status(400).json({
-        is_success: false,
-        message: "'data' must be an array"
-      });
+      return res.status(400).json({ is_success: false, message: "'data' must be an array" });
     }
 
     const evenNumbers = [];
@@ -132,7 +138,7 @@ app.post("/bfhl", (req, res) => {
 
     const concatString = createAltCapsString(alphabets);
 
-    res.status(200).json({
+    res.json({
       is_success: true,
       user_id: "anisha_plawat_13122003",
       email: "anishaplawat13@gmail.com",
@@ -146,14 +152,10 @@ app.post("/bfhl", (req, res) => {
     });
 
   } catch (error) {
-    res.status(500).json({
-      is_success: false,
-      message: "Internal server error",
-      error: error.message
-    });
+    res.status(500).json({ is_success: false, message: "Internal server error", error: error.message });
   }
 });
 
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server running at http://localhost:${PORT}`);
 });
